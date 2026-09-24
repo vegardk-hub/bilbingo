@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<title>Bilbingo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="description" content="Bilbingo for norske veier. 202 ting å finne, fra sau og stavkirke til brøytebil og elgskilt. Virker uten nett. Ingen reklame, ingen kjøp.">
+<meta name="theme-color" content="#dbe7f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111c30" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Bilbingo">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./ikoner/ikon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./ikoner/ikon-180.png">
+<link rel="stylesheet" href="./css/stil.css">
+<style>
+  /* Forsidebildet hører til startskjermen og er lite nok til å bo her. */
+  .forsideboks {
+    border-radius: var(--rund-stor);
+    overflow: hidden;
+    box-shadow: var(--skygge);
+    border: 1px solid var(--kant);
+    line-height: 0;
+  }
+  .forside { width: 100%; height: auto; display: block; }
+  body:not(.klar) #laster { display: grid; }
+  body.klar #laster { display: none; }
+  #laster {
+    position: fixed;
+    inset: 0;
+    display: none;
+    place-items: center;
+    background: var(--bg);
+    z-index: 999;
+    font-weight: 700;
+    color: var(--blekk-svak);
+  }
+</style>
+</head>
+<body>
+<div id="laster">Laster Bilbingo …</div>
+<div id="app"></div>
+<noscript>
+  <p style="padding:24px;font:16px system-ui">Bilbingo trenger JavaScript for å virke.</p>
+</noscript>
+<script type="module" src="./js/app.js"></script>
+</body>
+</html>

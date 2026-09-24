@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Bilbingo">
+  <rect width="512" height="512" rx="112" fill="#1F6FEB"/>
+  <path d="M0 400 L512 400 L512 512 L0 512 Z" fill="#1249A8"/>
+  <rect x="118" y="104" width="86" height="86" rx="23" fill="#FFC93C"/>
+  <path d="M144 148 L157 161 L179 132" fill="none" stroke="#8A5C00" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="224" y="104" width="86" height="86" rx="23" fill="#fff"/>
+  <rect x="330" y="104" width="86" height="86" rx="23" fill="#fff"/>
+  <rect x="118" y="210" width="86" height="86" rx="23" fill="#fff"/>
+  <rect x="224" y="210" width="86" height="86" rx="23" fill="#FFC93C"/>
+  <path d="M250 254 L263 267 L285 238" fill="none" stroke="#8A5C00" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="330" y="210" width="86" height="86" rx="23" fill="#fff"/>
+  <rect x="118" y="316" width="86" height="86" rx="23" fill="#fff"/>
+  <rect x="224" y="316" width="86" height="86" rx="23" fill="#fff"/>
+  <rect x="330" y="316" width="86" height="86" rx="23" fill="#FFC93C"/>
+  <path d="M356 360 L369 373 L391 344" fill="none" stroke="#8A5C00" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+  <g transform="translate(256 452)">
+    <rect x="-77" y="-17" width="154" height="46" rx="14" fill="#E63946"/>
+    <rect x="-40" y="-58" width="80" height="45" rx="12" fill="#E63946"/>
+    <rect x="-31" y="-49" width="27" height="28" rx="6" fill="#BFE6F5"/>
+    <rect x="4" y="-49" width="27" height="28" rx="6" fill="#BFE6F5"/>
+    <circle cx="-43" cy="29" r="16" fill="#2B2D42"/>
+    <circle cx="43" cy="29" r="16" fill="#2B2D42"/>
+    <circle cx="-43" cy="29" r="6" fill="#D4DBE6"/>
+    <circle cx="43" cy="29" r="6" fill="#D4DBE6"/>
+  </g>
+</svg>

@@ -1,0 +1,20 @@
+{
+  "name": "Bilbingo",
+  "short_name": "Bilbingo",
+  "description": "Bilbingo for norske veier. Virker uten nett.",
+  "lang": "nb",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#e9f0f8",
+  "theme_color": "#dbe7f5",
+  "categories": ["games", "kids", "travel"],
+  "icons": [
+    { "src": "./ikoner/ikon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "./ikoner/ikon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./ikoner/ikon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./ikoner/ikon-maske-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
