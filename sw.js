@@ -9,7 +9,7 @@
 // Husk å telle opp VERSJON ved hver utgivelse, ellers henger GitHub Pages
 // igjen med gamle filer.
 
-const VERSJON = 'v1';
+const VERSJON = 'v2';
 const LAGER = `bilbingo-${VERSJON}`;
 
 const FILER = [

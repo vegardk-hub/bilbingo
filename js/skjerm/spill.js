@@ -19,8 +19,11 @@ let angrefrist = null;
 // og en ny lytter per tegning ville hopet seg opp.
 let tilpassNa = null;
 
-// Hvilke brett har allerede fått den store bingo-feiringen.
+// Hvilke brett har allerede fått den store bingo-feiringen. Nullstilles når
+// runden eller spillet skifter, ellers ville første bingo i et nytt spill
+// gå stille forbi.
 const feiretBingo = new Set();
+let feiretFor = null;
 const vedEndretStorrelse = () => requestAnimationFrame(() => tilpassNa?.());
 addEventListener('resize', vedEndretStorrelse);
 addEventListener('orientationchange', vedEndretStorrelse);
@@ -34,6 +37,12 @@ export function tegn() {
       knapp('Til forsiden', { klasse: 'stor hoved full', onclick: () => gaaTil('start') })));
   }
   if (aktivSpiller >= spill.deltakere.length) aktivSpiller = 0;
+
+  const merkelapp = `${spill.kode}|${spill.runde}`;
+  if (feiretFor !== merkelapp) {
+    feiretBingo.clear();
+    feiretFor = merkelapp;
+  }
 
   const rute = RUTE_ETTER_ID[spill.ruteId];
 
@@ -271,6 +280,7 @@ export function tegn() {
   function paaNyttBrett() {
     nesteRunde(spill);
     feiretBingo.clear();
+    feiretFor = `${spill.kode}|${spill.runde}`;
     aktivSpiller = 0;
     LYD.nyttStopp();
     tegnAlt();
