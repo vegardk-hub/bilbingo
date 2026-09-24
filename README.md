@@ -21,6 +21,30 @@ og hele designet her er bygget rundt å ikke gjøre det samme:
 | **Betalingsmur mot barn.** En av de nyeste appene gir gratisbrukere **ett spill per 24 timer**, så 2,99 $. | Alt er med. Det finnes ingen kjøpsknapp noe sted i appen. |
 | **Varer tjue minutter.** Du fyller ett brett, og så er spillet over. En biltur Oslo–Trondheim er sju timer. | Tre lag som bygger på hverandre — se under. |
 
+## Tre måter å spille på
+
+**Sammen** — ett felles brett, alle fyller det. **Mot hverandre** — hvert sitt
+brett, tilpasset alderen. **Frimodus** — ingen brett i det hele tatt.
+
+### Frimodus
+
+Bingobrettet har én svakhet: det bestemmer på forhånd hva som teller. Ser dere
+en elg som ikke står på brettet, skjer det ingenting.
+
+I frimodus ligger alle 202 tingene framme samtidig. Trykk på det dere ser,
+uansett hva det er. Og ser dere det igjen om en halvtime, trykk igjen — tellingen
+fortsetter, og hver ting viser hvor mange ganger den er sett.
+
+Det krever en sperre, ellers trykker en femåring «rød bil» tjue ganger på rad:
+**hvert felt låses i 30 sekunder etter et trykk**, felles for alle i bilen. Feltet
+viser nedtellingen stort, så det er tydelig at det er en pause og ikke en feil.
+Et nytt trykk krever dermed en ny rød bil.
+
+Tallene nullstilles aldri av seg selv. Går dere inn i frimodus neste helg, ligger
+de der dere forlot dem, og alt teller samtidig inn i spottboka og merkene.
+Filtrene «Passer nå», «Funnet» og «Ikke funnet» gjør at man slipper å bla forbi
+snømenn i juli.
+
 ## Tre lag, tre tidsskalaer
 
 **Brettet (2–10 minutter).** Vanlig bingo. Se noe, trykk på det, fyll en rekke.
@@ -113,10 +137,11 @@ js/data/ting.js       katalogen: 202 ting med sjeldenhet, alder, årstid, sted
 js/data/tegning.js    grunnformer for ikonene (bil, firbeint dyr, skilt, hus …)
 js/data/ikoner.js     202 SVG-ikoner bygget på grunnformene
 js/data/ruter.js      sju norske strekninger med milepæler
-js/data/merker.js     30 merker
+js/data/merker.js     33 merker
 js/data/quiz.js       46 quizspørsmål
 js/kjerne/brett.js    brettgenerering, nivåer, bingo-logikk
-js/kjerne/spill.js    spilltilstand
+js/kjerne/spill.js    spilltilstand for brettspillene
+js/kjerne/frimodus.js telling, 30-sekunderssperre og varig lagring i frimodus
 js/kjerne/lager.js    lagring i localStorage
 js/kjerne/lyd.js      lyd laget med Web Audio, tale med Web Speech
 js/kjerne/tilfeldig.js frø-styrt tilfeldighet og spillkoder

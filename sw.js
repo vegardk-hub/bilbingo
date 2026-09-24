@@ -9,7 +9,7 @@
 // Husk å telle opp VERSJON ved hver utgivelse, ellers henger GitHub Pages
 // igjen med gamle filer.
 
-const VERSJON = 'v2';
+const VERSJON = 'v3';
 const LAGER = `bilbingo-${VERSJON}`;
 
 const FILER = [
@@ -25,6 +25,7 @@ const FILER = [
   './js/data/merker.js',
   './js/data/quiz.js',
   './js/kjerne/brett.js',
+  './js/kjerne/frimodus.js',
   './js/kjerne/lager.js',
   './js/kjerne/lyd.js',
   './js/kjerne/spill.js',
@@ -33,6 +34,7 @@ const FILER = [
   './js/skjerm/start.js',
   './js/skjerm/oppsett.js',
   './js/skjerm/spill.js',
+  './js/skjerm/frimodus.js',
   './js/skjerm/pause.js',
   './js/skjerm/spottbok.js',
   './js/skjerm/innstillinger.js',

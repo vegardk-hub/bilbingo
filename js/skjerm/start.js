@@ -3,6 +3,7 @@
 import { h, knapp, ikon, symbol, stolpe } from '../kjerne/ui.js';
 import { les } from '../kjerne/lager.js';
 import { hentAktivt } from '../kjerne/spill.js';
+import { erIGang, oppsummering } from '../kjerne/frimodus.js';
 import { RUTE_ETTER_ID, posisjon } from '../data/ruter.js';
 import { TING } from '../data/ting.js';
 import { gaaTil } from '../app.js';
@@ -48,6 +49,8 @@ export function tegn() {
   const t = les();
   const aktivt = hentAktivt();
   const settAntall = Object.keys(t.spottbok.sett).length;
+  const friIGang = erIGang();
+  const { ulike: friUlike, totalt: friTotalt } = oppsummering();
 
   const innhold = h('div.innhold');
 
@@ -74,6 +77,10 @@ export function tegn() {
     );
   }
 
+  const friOppsummering = friIGang
+    ? `${friTotalt} funn · ${friUlike} forskjellige`
+    : 'Ingen brett — kryss av alt dere ser';
+
   innhold.append(
     h('div.kortliste', {},
       knapp(aktivt ? 'Start en ny tur' : 'Start en tur', {
@@ -81,6 +88,14 @@ export function tegn() {
         sym: aktivt ? 'nytt' : 'spill',
         onclick: () => gaaTil('oppsett'),
       }),
+      h('button.valgkort', {
+        type: 'button',
+        onclick: () => gaaTil(friIGang ? 'frimodus' : 'oppsett'),
+      },
+        h('span.merke', {}, ikon('postkasser')),
+        h('span.tekst', {}, h('b', friIGang ? 'Fortsett frimodus' : 'Frimodus'),
+          h('span.liten.svak', friOppsummering)),
+        symbol('pil')),
       h('button.valgkort', { type: 'button', onclick: () => gaaTil('spottbok') },
         h('span.merke', {}, ikon('postkasser')),
         h('span.tekst', {}, h('b', 'Spottboka'),

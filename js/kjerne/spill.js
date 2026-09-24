@@ -30,6 +30,12 @@ export const MODUS = {
     kort: 'Hvert sitt brett. Først til bingo.',
     lang: 'Alle får sitt eget brett, tilpasset alderen sin. Den som ligger bakerst får et gratisfelt nå og da, så ingen henger håpløst etter.',
   },
+  fri: {
+    id: 'fri',
+    navn: 'Frimodus',
+    kort: 'Ingen brett. Hele spottboka.',
+    lang: 'Ingenting er valgt ut på forhånd — alle 202 tingene er i spill, og ser dere den samme tingen flere ganger teller alle. Tallene huskes til neste tur.',
+  },
 };
 
 function naa() { return Date.now(); }
@@ -277,6 +283,8 @@ export function statistikkFor(tilstand = les()) {
     ...st,
     sjeldne: st.sjeldne || 0,
     legendariske: st.legendariske || 0,
+    friFunn: st.friFunn || 0,
+    friUlike: Object.keys(tilstand.frimodus?.antall || {}).length,
     sett: Object.keys(tilstand.spottbok.sett),
   };
 }

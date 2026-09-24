@@ -3,6 +3,7 @@
 import { h, knapp, ikon, symbol, tilbakeknapp, ark, bekreft } from '../kjerne/ui.js';
 import { les, endre } from '../kjerne/lager.js';
 import { FARGER, MODUS, nyttSpill } from '../kjerne/spill.js';
+import { startFrimodus } from '../kjerne/frimodus.js';
 import { NIVAA } from '../kjerne/brett.js';
 import { RUTER } from '../data/ruter.js';
 import { gyldigKode } from '../kjerne/tilfeldig.js';
@@ -159,6 +160,7 @@ export function tegn() {
   }
 
   // ---------- modus
+  const MODUSIKON = { sammen: 'vinker', mot: 'fart80', fri: 'postkasser' };
   const modusliste = h('div.kortliste');
   Object.values(MODUS).forEach((m) => {
     modusliste.append(h('button.valgkort', {
@@ -167,9 +169,10 @@ export function tegn() {
       onclick: () => {
         valgtModus = m.id;
         [...modusliste.children].forEach((c, i) => c.setAttribute('aria-pressed', String(Object.values(MODUS)[i].id === m.id)));
+        oppdaterModus();
       },
     },
-    h('span.merke', {}, ikon(m.id === 'sammen' ? 'vinker' : 'fart80')),
+    h('span.merke', {}, ikon(MODUSIKON[m.id])),
     h('span.tekst', {}, h('b', m.navn), h('span.liten.svak', m.lang))));
   });
 
@@ -195,6 +198,11 @@ export function tegn() {
       const med = valgt();
       if (!med.length) return;
       LYD.nyttStopp();
+      if (valgtModus === 'fri') {
+        startFrimodus(med);
+        gaaTil('frimodus');
+        return;
+      }
       nyttSpill({ modus: valgtModus, spillere: med, ruteId: valgtRute, kode: gyldigKode(delekode) });
       gaaTil('spill');
     },
@@ -206,26 +214,44 @@ export function tegn() {
     startknapp.querySelector('span:last-child').textContent = n ? `Kjør! (${n} ${n === 1 ? 'spiller' : 'spillere'})` : 'Velg minst én spiller';
   }
 
+  // Frimodus har verken rute eller brett, så begge de valgene skjules.
+  const ruteseksjon = h('section');
+  const delingsboks = h('details.kort');
+  function oppdaterModus() {
+    const fri = valgtModus === 'fri';
+    ruteseksjon.hidden = fri;
+    delingsboks.hidden = fri;
+  }
+
   tegnSpillere();
   oppdaterStart();
+
+  ruteseksjon.append(
+    h('h2', { style: { marginBottom: '4px' } }, 'Hvor skal dere?'),
+    h('p.liten.svak', { style: { marginBottom: '10px' } },
+      'Poengene dere samler blir kilometer. Velg en strekning som passer til hvor lenge dere skal kjøre.'),
+    ruteliste,
+  );
+
+  delingsboks.append(
+    h('summary', { style: { fontWeight: '700', minHeight: '44px', display: 'flex', alignItems: 'center' } },
+      'Flere nettbrett i bilen?'),
+    h('p.liten.svak', { style: { margin: '10px 0' } },
+      'Skriv inn samme kode på hver enhet, så trekkes brettene fra samme stokk — men alle får sitt eget brett. Ingen nett trengs.'),
+    h('input.pille', {
+      type: 'text', placeholder: 'Kode, f.eks. K7F2', maxlength: 4, autocapitalize: 'characters', autocomplete: 'off',
+      style: { width: '100%', minHeight: '58px', textTransform: 'uppercase', letterSpacing: '0.2em', fontWeight: '800', textAlign: 'center' },
+      oninput: (e) => { delekode = e.target.value.toUpperCase(); },
+    }),
+  );
+
+  oppdaterModus();
 
   innhold.append(
     h('section', {}, h('h2', { style: { marginBottom: '10px' } }, 'Hvem er med?'), spillerliste),
     h('section', {}, h('h2', { style: { marginBottom: '10px' } }, 'Hvordan spiller dere?'), modusliste),
-    h('section', {}, h('h2', { style: { marginBottom: '4px' } }, 'Hvor skal dere?'),
-      h('p.liten.svak', { style: { marginBottom: '10px' } },
-        'Poengene dere samler blir kilometer. Velg en strekning som passer til hvor lenge dere skal kjøre.'),
-      ruteliste),
-    h('details.kort', {},
-      h('summary', { style: { fontWeight: '700', minHeight: '44px', display: 'flex', alignItems: 'center' } },
-        'Flere nettbrett i bilen?'),
-      h('p.liten.svak', { style: { margin: '10px 0' } },
-        'Skriv inn samme kode på hver enhet, så trekkes brettene fra samme stokk — men alle får sitt eget brett. Ingen nett trengs.'),
-      h('input.pille', {
-        type: 'text', placeholder: 'Kode, f.eks. K7F2', maxlength: 4, autocapitalize: 'characters', autocomplete: 'off',
-        style: { width: '100%', minHeight: '58px', textTransform: 'uppercase', letterSpacing: '0.2em', fontWeight: '800', textAlign: 'center' },
-        oninput: (e) => { delekode = e.target.value.toUpperCase(); },
-      })),
+    ruteseksjon,
+    delingsboks,
   );
 
   return h('div.skjerm', {},

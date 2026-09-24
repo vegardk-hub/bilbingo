@@ -20,7 +20,17 @@ export const STANDARD = {
       tunneler: 0,
       ferjer: 0,
       samarbeid: 0,
+      friFunn: 0,
     },
+  },
+  // Frimodus lever ved siden av turene og nullstilles aldri av seg selv.
+  frimodus: {
+    startet: null,
+    deltakere: [],
+    antall: {},   // tingId -> hvor mange ganger sett
+    sistFunn: {}, // tingId -> tidspunkt, til tretti-sekunderssperren
+    sisteAv: {},  // tingId -> hvem som fant den sist, til fargen
+    logg: [],
   },
   innstillinger: {
     lyd: true,

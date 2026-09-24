@@ -621,6 +621,79 @@ svg.ik { width: 26px; height: 26px; flex: none; }
 .bokfelt[data-sett='nei'] .navn { opacity: 0.35; }
 .bokfelt[data-sett='nei'] { background: var(--flate-2); }
 
+/* ------------------------------------------------------------ frimodus */
+
+/* Frimodus viser hele katalogen på én gang. Feltene er litt mindre enn i
+   spottboka, fordi de skal trykkes på mens bilen rister — men aldri under
+   det som er greit å treffe med en barnefinger. */
+
+/* Rutenettet er høyt, og uten dette klemmer kolonneflexen sammen alt som
+   står over det. */
+.friinnhold { gap: 12px; }
+.friinnhold > * { flex: none; }
+
+/* Tettere enn spottboka: her skal man treffe mange felt etter hverandre,
+   og det lønner seg å se flest mulig uten å bla. */
+.frirutenett { grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 8px; }
+
+@media (min-width: 700px) {
+  .frirutenett { grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); }
+}
+
+.frikort { padding: 10px; }
+.frisum { display: flex; gap: 8px; }
+.frisum .tall { padding: 8px 6px; }
+.frisum .tall b { font-size: 1.3rem; }
+
+.frifilter { position: sticky; top: 0; z-index: 5; }
+
+.frifelt {
+  min-height: 84px;
+  transition: transform 0.12s ease, border-color 0.15s ease;
+}
+
+.frifelt:active { transform: scale(0.94); }
+
+.frifelt[data-funnet='ja'] {
+  border-color: var(--spillerfarge, var(--gronn));
+  background: color-mix(in srgb, var(--spillerfarge, var(--gronn)) 10%, var(--flate));
+}
+
+/* Sperren: feltet er nettopp talt og kan ikke trykkes på igjen ennå.
+   Nedtellingen vises stort, så det er tydelig at det er en pause og ikke feil. */
+.frifelt .sperre {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  color: var(--blekk);
+  background: color-mix(in srgb, var(--flate) 82%, transparent);
+  backdrop-filter: blur(1px);
+}
+
+.frifelt[data-sperret='ja'] .sperre { display: flex; }
+.frifelt[data-sperret='ja'] { border-color: var(--kant); }
+.frifelt[data-sperret='ja']:active { transform: none; }
+
+.frifelt .antall {
+  background: var(--gronn);
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Liten risting når noen prøver seg på et felt som fortsatt er sperret. */
+.rist { animation: rist 0.32s ease; }
+
+@keyframes rist {
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-3px); }
+}
+
 .merkerute {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));

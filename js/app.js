@@ -47,10 +47,11 @@ export function settInnstilling(nokkel, verdi) {
 
 async function start() {
   // Skjermene lastes etter at oppsettet er lest, så første bilde kommer raskt.
-  const [start, oppsett, spill, pause, spottbok, innstillinger] = await Promise.all([
+  const [start, oppsett, spill, frimodus, pause, spottbok, innstillinger] = await Promise.all([
     import('./skjerm/start.js'),
     import('./skjerm/oppsett.js'),
     import('./skjerm/spill.js'),
+    import('./skjerm/frimodus.js'),
     import('./skjerm/pause.js'),
     import('./skjerm/spottbok.js'),
     import('./skjerm/innstillinger.js'),
@@ -58,6 +59,7 @@ async function start() {
   registrer('start', start.tegn);
   registrer('oppsett', oppsett.tegn);
   registrer('spill', spill.tegn);
+  registrer('frimodus', frimodus.tegn);
   registrer('pause', pause.tegn);
   registrer('spottbok', spottbok.tegn);
   registrer('innstillinger', innstillinger.tegn);

@@ -70,6 +70,11 @@ export const MERKER = [
   { id: 'tunnelmester', navn: 'Tunnelmester', tekst: 'Spill tunnelspillet fem ganger.', ikon: 'tunnel', test: (s) => s.tunneler >= 5 },
   { id: 'ferjemester', navn: 'Om bord', tekst: 'Spill fergespillet tre ganger.', ikon: 'ferje', test: (s) => s.ferjer >= 3 },
 
+  // --- frimodus
+  { id: 'fri-50', navn: 'Frihåndssamler', tekst: 'Registrer 50 funn i frimodus.', ikon: 'postkasser', test: (s) => (s.friFunn || 0) >= 50 },
+  { id: 'fri-250', navn: 'Notorisk speider', tekst: 'Registrer 250 funn i frimodus.', ikon: 'fyrtaarn', test: (s) => (s.friFunn || 0) >= 250 },
+  { id: 'fri-ulike-100', navn: 'Bredt blikk', tekst: 'Finn 100 forskjellige ting i frimodus.', ikon: 'kran', test: (s) => (s.friUlike || 0) >= 100 },
+
   // --- sammen
   { id: 'lagspill', navn: 'Sammen', tekst: 'Fullfør et brett i Sammen-modus.', ikon: 'vinker', test: (s) => s.samarbeid >= 1 },
   { id: 'lagspill-10', navn: 'Godt lag', tekst: 'Fullfør ti brett i Sammen-modus.', ikon: 'rasteplass', test: (s) => s.samarbeid >= 10 },
