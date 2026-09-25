@@ -32,9 +32,14 @@ export const STANDARD = {
     sisteAv: {},  // tingId -> hvem som fant den sist, til fargen
     logg: [],
   },
+  // Koden ligger i klartekst. Den er en sperre mot uhell, ikke sikkerhet,
+  // og appen sier det rett ut der koden settes.
+  foreldre: { kode: null },
+  sistTrykk: 0, // til den felles trykkpausen
   innstillinger: {
     lyd: true,
     stemme: true,
+    trykkpause: 15, // sekunder mellom hvert trykk; 0 slår den av
     sted: 'overalt',
     sesongAuto: true,
     sesong: null,

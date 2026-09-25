@@ -61,6 +61,9 @@ const SYMBOL = {
   pil: '<path d="M30 20 L60 50 L30 80" fill="none" stroke="currentColor" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>',
   stjerne: '<path d="M50 10 L61 38 L92 40 L68 60 L76 90 L50 73 L24 90 L32 60 L8 40 L39 38 Z" fill="currentColor"/>',
   blyant: '<path d="M22 78 L20 80 L30 78 L78 30 A9 9 0 0 0 66 18 L18 66 Z" fill="none" stroke="currentColor" stroke-width="9" stroke-linejoin="round"/><path d="M60 24 L74 38" stroke="currentColor" stroke-width="9" stroke-linecap="round"/>',
+  laas: '<rect x="22" y="44" width="56" height="44" rx="9" fill="currentColor"/><path d="M34 44 L34 32 A16 16 0 0 1 66 32 L66 44" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"/><circle cx="50" cy="62" r="6" fill="#fff"/><rect x="47" y="64" width="6" height="12" rx="3" fill="#fff"/>',
+  laasApen: '<rect x="22" y="44" width="56" height="44" rx="9" fill="currentColor"/><path d="M34 44 L34 32 A16 16 0 0 1 66 32" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"/><circle cx="50" cy="62" r="6" fill="#fff"/><rect x="47" y="64" width="6" height="12" rx="3" fill="#fff"/>',
+  klokke: '<circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" stroke-width="9"/><path d="M50 26 L50 52 L68 62" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>',
   nytt: '<path d="M50 14 A36 36 0 1 0 82 34" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"/><path d="M84 10 L84 36 L58 36" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>',
 };
 
@@ -110,15 +113,24 @@ export function ark(innhold, { lukkbar = true, vedLukk = null } = {}) {
 
 export function bekreft({ tittel, tekst, ja = 'Ja', nei = 'Avbryt', fare = false }) {
   return new Promise((los) => {
+    // Svaret må settes før arket lukkes: lukk() kjører vedLukk, og hvis den
+    // rekker å svare «nei» først, blir et «ja» stille forkastet fordi løftet
+    // allerede er innfridd.
+    let svart = false;
+    const svar = (verdi) => {
+      if (svart) return;
+      svart = true;
+      los(verdi);
+    };
     const lukk = ark(
       [
         h('h2', tittel),
         tekst ? h('p.svak', tekst) : null,
         h('div.kortliste', {},
-          knapp(ja, { klasse: fare ? 'stor fare' : 'stor hoved', onclick: () => { lukk(); los(true); } }),
-          knapp(nei, { klasse: 'stor', onclick: () => { lukk(); los(false); } })),
+          knapp(ja, { klasse: fare ? 'stor fare' : 'stor hoved', onclick: () => { svar(true); lukk(); } }),
+          knapp(nei, { klasse: 'stor', onclick: () => { svar(false); lukk(); } })),
       ],
-      { vedLukk: () => los(false) },
+      { vedLukk: () => svar(false) },
     );
   });
 }
@@ -210,6 +222,23 @@ export function bryter(tekst, pa, vedEndring, undertekst = '') {
   h('span.voks', {}, h('b', tekst), undertekst ? h('div.liten.svak', undertekst) : null),
   h('span.vipp'));
   return el;
+}
+
+/**
+ * Nedtellingsbrikke for den felles trykkpausen. Barna skal se at det er en
+ * pause som går, ikke lure på om appen har hengt seg.
+ */
+export function pausebrikke() {
+  const tall = h('b');
+  const el = h('div.pausebrikke', { role: 'status' }, symbol('klokke'), tall);
+  el.hidden = true;
+  return {
+    el,
+    vis(sekunder) {
+      el.hidden = !sekunder;
+      if (sekunder) tall.textContent = `${sekunder} sek`;
+    },
+  };
 }
 
 export function tomFor(el) {

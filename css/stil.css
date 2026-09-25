@@ -621,6 +621,98 @@ svg.ik { width: 26px; height: 26px; flex: none; }
 .bokfelt[data-sett='nei'] .navn { opacity: 0.35; }
 .bokfelt[data-sett='nei'] { background: var(--flate-2); }
 
+/* ------------------------------------------------------------ foreldrekontroll */
+
+/* Inngangen på forsiden skal være lett å finne for en voksen som leter, og
+   lite fristende for et barn som ikke gjør det. */
+.bunnrad { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+
+.foreldreknapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  color: var(--blekk-svak);
+  font-size: 0.86rem;
+  font-weight: 700;
+  border: 1px solid var(--kant);
+  background: transparent;
+}
+
+.foreldreknapp svg { width: 18px; height: 18px; flex: none; }
+.foreldreknapp:active { background: var(--flate-2); }
+
+.kodeinnhold { align-items: center; justify-content: flex-start; }
+.kodeinnhold > * { flex: none; width: 100%; max-width: 360px; }
+
+.laas { display: inline-block; color: var(--primaer); }
+.laas svg { width: 56px; height: 56px; }
+
+.kodeprikker { display: flex; justify-content: center; gap: 18px; margin: 4px 0; }
+
+.kodeprikk {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 3px solid var(--kant);
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+.kodeprikk.fylt { background: var(--primaer); border-color: var(--primaer); transform: scale(1.12); }
+
+.tastatur {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.tast {
+  min-height: 72px;
+  border-radius: 18px;
+  background: var(--flate);
+  border: 2px solid var(--kant);
+  font-size: 1.6rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  box-shadow: var(--skygge);
+  display: grid;
+  place-items: center;
+}
+
+.tast:active { transform: scale(0.95); background: var(--flate-2); }
+.tast.viskut svg { width: 28px; height: 28px; color: var(--blekk-svak); }
+
+/* Den ene seksjonen som sletter alt skal se annerledes ut enn resten. */
+.farekort {
+  border-color: color-mix(in srgb, var(--rod) 45%, var(--kant));
+  background: color-mix(in srgb, var(--rod) 5%, var(--flate));
+}
+
+/* ------------------------------------------------------------ trykkpause */
+
+.pausebrikke {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--gul) 26%, var(--flate));
+  border: 2px solid var(--gul);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  flex: none;
+}
+
+.pausebrikke svg { width: 20px; height: 20px; flex: none; color: #8a5c00; }
+.pausebrikke b { font-size: 0.92rem; }
+.pausebrikke[hidden] { display: none; }
+
+.knapp.angre { min-height: 52px; padding: 10px 16px; flex: none; }
+.knapp.angre .ik { width: 22px; height: 22px; }
+
 /* ------------------------------------------------------------ frimodus */
 
 /* Frimodus viser hele katalogen på én gang. Feltene er litt mindre enn i
@@ -645,7 +737,21 @@ svg.ik { width: 26px; height: 26px; flex: none; }
 .frisum .tall { padding: 8px 6px; }
 .frisum .tall b { font-size: 1.3rem; }
 
-.frifilter { position: sticky; top: 0; z-index: 5; }
+/* Filtrene og verktøyene følger med når man blar gjennom 202 felt. */
+.fristikk {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--bg);
+  padding: 8px 0 6px;
+  margin: -8px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.friverktoy { display: flex; align-items: center; gap: 10px; }
+.friverktoy .pausebrikke[hidden] + .voks { flex: 1; }
 
 .frifelt {
   min-height: 84px;

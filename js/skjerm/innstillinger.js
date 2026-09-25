@@ -1,8 +1,8 @@
 // Innstillinger. Kort liste — det viktige er at sted og årstid stemmer, ellers
 // står det ting på brettet som ikke går an å finne der dere faktisk kjører.
 
-import { h, knapp, tilbakeknapp, bekreft, ikon, bryter } from '../kjerne/ui.js';
-import { les, nullstillAlt } from '../kjerne/lager.js';
+import { h, knapp, tilbakeknapp, ikon, bryter } from '../kjerne/ui.js';
+import { les } from '../kjerne/lager.js';
 import { STEDER } from '../kjerne/brett.js';
 import { sesongNa, TING, KATEGORIER } from '../data/ting.js';
 import { hentAktivt } from '../kjerne/spill.js';
@@ -105,20 +105,14 @@ export function tegn() {
     h('div.rad.bryt', { style: { marginTop: '14px' } },
       h('span.merkelapp', {}, ikon('tunnel', 'ik'), 'Virker uten nett'),
       h('span.merkelapp', {}, ikon('hundIBil', 'ik'), 'Ingen sporing')),
+    // Ingenting som sletter noe ligger her lenger. Det holder til i
+    // foreldrekontrollen, bak kode, så ingen tømmer spottboka med en feilfinger.
     h('div', { style: { marginTop: '16px' } },
-      knapp('Slett alt og begynn på nytt', {
-        klasse: 'fare full',
-        onclick: async () => {
-          if (await bekreft({
-            tittel: 'Slette alt?',
-            tekst: 'Spottboka, merkene, turene og spillerne forsvinner for godt.',
-            ja: 'Slett alt', fare: true,
-          })) {
-            nullstillAlt();
-            gaaTil('start');
-          }
-        },
-      }))));
+      knapp('Foreldrekontroll', {
+        klasse: 'full', sym: 'laas', onclick: () => gaaTil('foreldre'),
+      }),
+      h('p.liten.svak', { style: { marginTop: '10px' } },
+        'Der ligger alt som sletter noe: spillere, turer, spottboka og full nullstilling.'))));
 
   return h('div.skjerm', {},
     h('div.topplinje', {}, tilbakeknapp(() => gaaTil(aktivt ? 'spill' : 'start')), h('h2', 'Innstillinger')),

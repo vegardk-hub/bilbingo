@@ -1,7 +1,8 @@
 // Spillskjermen. Her ligger hele kjernesløyfa:
 // se noe ut av vinduet -> trykk -> appen sier ordet høyt -> alle hører det.
 
-import { h, knapp, ikon, symbol, ark, bekreft, rop, feire, stolpe, tom } from '../kjerne/ui.js';
+import { h, knapp, ikon, symbol, ark, bekreft, rop, feire, stolpe, tom, pausebrikke } from '../kjerne/ui.js';
+import { igjen as pauseIgjen, merkTrykk, nullstillPause, folg } from '../kjerne/sperre.js';
 import { TING_ETTER_ID, SJELDENHET, POENG } from '../data/ting.js';
 import { RUTE_ETTER_ID } from '../data/ruter.js';
 import { MERKE_ETTER_ID } from '../data/merker.js';
@@ -13,7 +14,6 @@ import { LYD, si } from '../kjerne/lyd.js';
 import { gaaTil, tegnPaaNytt } from '../app.js';
 
 let aktivSpiller = 0; // hvem sitt trykk er det (Sammen-modus og delt nettbrett)
-let angrefrist = null;
 
 // Én lytter for hele modulen. Skjermen tegnes mange ganger i løpet av en tur,
 // og en ny lytter per tegning ville hopet seg opp.
@@ -69,8 +69,11 @@ export function tegn() {
 
   // ---------------------------------------------------------------- bunn
   const velger = h('div.spillervelger');
-  const angreknapp = knapp('', { klasse: 'ikonknapp', sym: 'angre', 'aria-label': 'Angre siste avkryssing', onclick: paaAngre });
-  angreknapp.style.display = 'none';
+  // Angreknappen står alltid framme. Den forsvant før etter åtte sekunder, og
+  // da var den borte akkurat når noen oppdaget at de hadde trykket feil.
+  const angreknapp = knapp('Angre', { klasse: 'angre', sym: 'angre', onclick: paaAngre });
+  const pause = pausebrikke();
+  folg((sek) => pause.vis(sek), () => angreknapp.isConnected);
   const statuslinje = h('div.rad', { style: { marginTop: '8px' } });
 
   const bunn = h('div.bunnlinje', {}, velger, statuslinje);
@@ -146,12 +149,15 @@ export function tegn() {
     const fr = fremdrift(spill.brett[nr], spill.merket[nr]);
     const bingo = finnBingo(spill.brett[nr], spill.merket[nr]);
 
+    angreknapp.disabled = !spill.siste;
+
     statuslinje.append(
       h('div.voks.statustekst', {},
         h('div.liten.svak', spill.modus === 'sammen'
           ? `Runde ${spill.runde} · ${fr.krysset} av ${fr.total}`
           : `${spill.deltakere[aktivSpiller].navn} · ${fr.krysset} av ${fr.total}`),
         stolpe(fr.besteLinje, { tynn: true })),
+      pause.el,
       angreknapp,
     );
 
@@ -213,19 +219,30 @@ export function tegn() {
   // ---------------------------------------------------------------- handling
 
   function paaTrykk(brettNr, tingId, el) {
+    const ting = TING_ETTER_ID[tingId];
     if (spill.merket[brettNr].includes(tingId)) {
       // Allerede krysset av — gi beskjed i stedet for å gjøre ingenting.
       LYD.tikk();
-      const ting = TING_ETTER_ID[tingId];
       rop(ting.ikon, ting.navn, 'Allerede funnet');
       return;
     }
+
+    // Felles trykkpause: uten den er hele brettet fylt på ti sekunder.
+    const vent = pauseIgjen();
+    if (vent > 0) {
+      LYD.stopp();
+      rop('gulStripe', `Vent ${vent} sek`, 'Én ting om gangen');
+      el.classList.remove('rist');
+      requestAnimationFrame(() => el.classList.add('rist'));
+      return;
+    }
+
     const d = spill.deltakere[aktivSpiller];
     const r = kryssAv(spill, { brettNr, tingId, spillerId: d.spillerId });
     if (!r) return;
+    merkTrykk();
     feireFunn(r, d);
     tegnAlt();
-    startAngrefrist();
   }
 
   function feireFunn(r, d) {
@@ -260,20 +277,13 @@ export function tegn() {
     if (r.nyeMerker.length) setTimeout(() => visMerker(r.nyeMerker), r.naddeStopp ? 3400 : 1600);
   }
 
-  function startAngrefrist() {
-    angreknapp.style.display = '';
-    clearTimeout(angrefrist);
-    // Åtte sekunder: nok til at en femåring rekker å si «nei, feil!».
-    angrefrist = setTimeout(() => { angreknapp.style.display = 'none'; }, 8000);
-  }
-
   function paaAngre() {
     const r = angre(spill);
     if (!r) return;
     LYD.angre();
     rop(r.ting.ikon, r.ting.navn, 'Angret');
-    angreknapp.style.display = 'none';
-    clearTimeout(angrefrist);
+    // Et feiltrykk skal ikke koste femten sekunder i tillegg.
+    nullstillPause();
     tegnAlt();
   }
 

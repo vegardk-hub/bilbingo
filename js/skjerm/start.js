@@ -106,8 +106,14 @@ export function tegn() {
         h('span.tekst', {}, h('b', 'Innstillinger'),
           h('span.liten.svak', 'Lyd, sted, årstid og alder')),
         symbol('pil'))),
-    h('p.liten.svak.midt', { style: { marginTop: 'auto', paddingTop: '18px' } },
-      'Virker uten nett. Ingen reklame, ingen kjøp, ingenting sendes noe sted.'),
+    h('div.bunnrad', { style: { marginTop: 'auto', paddingTop: '18px' } },
+      h('p.liten.svak.midt', 'Virker uten nett. Ingen reklame, ingen kjøp, ingenting sendes noe sted.'),
+      // Diskré med vilje: den skal være lett å finne for en voksen som leter,
+      // og lite fristende for en femåring som ikke gjør det.
+      h('button.foreldreknapp', {
+        type: 'button',
+        onclick: () => gaaTil('foreldre'),
+      }, symbol('laas'), 'Foreldrekontroll')),
   );
 
   return h('div.skjerm', {}, innhold);

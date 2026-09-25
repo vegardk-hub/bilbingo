@@ -3,7 +3,8 @@
 // Skjermen tegner 202 felt, så den bygges bare én gang per filter. Et trykk
 // oppdaterer det ene feltet, summen og spillerknappene — ikke hele rutenettet.
 
-import { h, knapp, ikon, symbol, tilbakeknapp, ark, bekreft, rop, feire, tom } from '../kjerne/ui.js';
+import { h, knapp, ikon, symbol, tilbakeknapp, ark, rop, feire, tom, pausebrikke } from '../kjerne/ui.js';
+import { igjen as pauseIgjen, merkTrykk, nullstillPause, folg } from '../kjerne/sperre.js';
 import { les } from '../kjerne/lager.js';
 import { TING, KATEGORIER, SJELDENHET, POENG, sesongNa, tidNa } from '../data/ting.js';
 import { MERKE_ETTER_ID } from '../data/merker.js';
@@ -11,10 +12,10 @@ import { lagPool } from '../kjerne/brett.js';
 import { FARGER } from '../kjerne/spill.js';
 import {
   SPERRE_MS, hentFrimodus, antallAv, registrer, angreSiste,
-  oppsummering, nullstillFrimodus,
+  oppsummering,
 } from '../kjerne/frimodus.js';
 import { LYD, si } from '../kjerne/lyd.js';
-import { gaaTil, tegnPaaNytt } from '../app.js';
+import { gaaTil } from '../app.js';
 
 let aktivSpiller = 0;
 let filter = 'alle';
@@ -60,10 +61,10 @@ export function tegn() {
   // ------------------------------------------------------------- topp
   const sumEl = h('div.frisum');
   const velger = h('div.spillervelger');
-  const angreknapp = knapp('', {
-    klasse: 'ikonknapp', sym: 'angre', 'aria-label': 'Angre siste registrering', onclick: paaAngre,
-  });
+  const angreknapp = knapp('Angre', { klasse: 'angre', sym: 'angre', onclick: paaAngre });
   angreknapp.disabled = !fri.logg.length;
+  const pause = pausebrikke();
+  folg((sek) => pause.vis(sek), () => angreknapp.isConnected);
 
   const filterrad = h('div.pillerad.frifilter');
   const valg = [
@@ -192,6 +193,19 @@ export function tegn() {
   // ------------------------------------------------------------- handling
 
   function paaTrykk(ting) {
+    // Den felles trykkpausen gjelder alle ting. Sperren per ting hindrer bare
+    // at den samme tingen telles to ganger — den stopper ikke noen fra å gå
+    // gjennom hele katalogen på ti sekunder.
+    const vent = pauseIgjen();
+    if (vent > 0) {
+      LYD.stopp();
+      rop('gulStripe', `Vent ${vent} sek`, 'Én ting om gangen');
+      const b = felter.get(ting.id);
+      b?.el.classList.remove('rist');
+      requestAnimationFrame(() => b?.el.classList.add('rist'));
+      return;
+    }
+
     const d = hentFrimodus().deltakere[aktivSpiller];
     const r = registrer(ting.id, d.spillerId);
     if (!r) return;
@@ -206,6 +220,7 @@ export function tegn() {
       return;
     }
 
+    merkTrykk();
     si(ting.navn.replace(/!$/, ''));
     if (ting.sjelden === 5) LYD.krysLegendarisk();
     else if (ting.sjelden === 4) LYD.krysSjelden();
@@ -233,6 +248,8 @@ export function tegn() {
     if (!r) return;
     LYD.angre();
     rop(r.ting.ikon, r.ting.navn, 'Angret');
+    // Et feiltrykk skal ikke koste ventetid i tillegg.
+    nullstillPause();
     oppdaterFelt(r.ting.id);
     oppdaterNedtelling();
     tegnSum();
@@ -290,22 +307,8 @@ export function tegn() {
         }))) : null,
       h('div.kortliste', {},
         knapp('Bytt spillere', { klasse: 'stor', onclick: () => { lukk(); gaaTil('oppsett'); } }),
-        knapp('Spottboka', { klasse: 'stor', sym: 'bok', onclick: () => { lukk(); gaaTil('spottbok'); } }),
-        knapp('Nullstill tellingen', {
-          klasse: 'stor fare',
-          onclick: async () => {
-            lukk();
-            if (await bekreft({
-              tittel: 'Nullstille frimodus?',
-              tekst: 'Alle tallene settes til null. Spottboka og merkene beholder dere.',
-              ja: 'Nullstill', fare: true,
-            })) {
-              nullstillFrimodus();
-              LYD.nyttStopp();
-              tegnPaaNytt();
-            }
-          },
-        })),
+        knapp('Spottboka', { klasse: 'stor', sym: 'bok', onclick: () => { lukk(); gaaTil('spottbok'); } })),
+      h('p.liten.svak.midt', 'Tellingen kan bare nullstilles fra foreldrekontrollen.'),
     ]);
   }
 
@@ -313,16 +316,21 @@ export function tegn() {
   tegnVelger();
   byggRutenett();
 
+  // Pause og angre står i en egen fast linje, ikke i topplinja: med fire ting
+  // oppe ble det ikke plass til tittelen på en telefon.
+  const verktoy = h('div.fristikk', {},
+    h('div.friverktoy', {}, pause.el, h('span.voks'), angreknapp),
+    filterrad);
+
   return h('div.skjerm', {},
     h('div.topplinje', {},
       tilbakeknapp(() => gaaTil('start')),
       h('h2', 'Frimodus'),
-      angreknapp,
       h('button.knapp.ikonknapp', { type: 'button', 'aria-label': 'Meny', onclick: visMeny }, symbol('tannhjul'))),
     h('div.innhold.friinnhold', {},
       h('div.kort.frikort', {}, sumEl),
       velger,
-      filterrad,
-      h('p.liten.svak', 'Ser dere den samme tingen igjen, trykk igjen. Hvert felt låses i 30 sekunder etterpå.'),
+      verktoy,
+      h('p.liten.svak', 'Ser dere den samme tingen igjen, trykk igjen. Hvert felt låses i 30 sekunder etterpå, og det er alltid en liten pause mellom hvert trykk.'),
       rutenett));
 }

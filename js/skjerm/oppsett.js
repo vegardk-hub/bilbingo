@@ -1,6 +1,6 @@
 // Oppsett av en tur. Skal gå unna — noen sitter allerede i bilen og venter.
 
-import { h, knapp, ikon, symbol, tilbakeknapp, ark, bekreft } from '../kjerne/ui.js';
+import { h, knapp, ikon, symbol, tilbakeknapp, ark } from '../kjerne/ui.js';
 import { les, endre } from '../kjerne/lager.js';
 import { FARGER, MODUS, nyttSpill } from '../kjerne/spill.js';
 import { startFrimodus } from '../kjerne/frimodus.js';
@@ -86,15 +86,11 @@ function spillerArk(spiller, vedLagring) {
           lukk();
           vedLagring(data);
         },
-      }),
-      !erNy ? knapp('Slett spiller', {
-        klasse: 'fare', onclick: async () => {
-          if (await bekreft({ tittel: `Slette ${data.navn}?`, ja: 'Slett', fare: true })) {
-            lukk();
-            vedLagring(null, data.id);
-          }
-        },
-      }) : null),
+      })),
+    // Ingen slettknapp her med vilje. Å slette en spiller er lett å gjøre ved
+    // et uhell med en finger i en bil som rister, så det ligger i
+    // foreldrekontrollen i stedet.
+    !erNy ? h('p.liten.svak.midt', 'Spillere slettes fra foreldrekontrollen på forsiden.') : null,
   ]);
 }
 

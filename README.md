@@ -115,6 +115,31 @@ Snømann om sommeren gir ingen mening, og reinsdyr på Sørlandet gjør ikke det
 heller. Ting er merket med årstid, tid på døgnet og landsdel, og brettet fylles
 bare med det som kan sees der dere er, nå.
 
+## Foreldrekontroll
+
+Alt som sletter noe for godt ligger bak en firesifret kode, og finnes ingen
+andre steder i appen. Resten av grensesnittet har ingen slettknapper i det hele
+tatt — en finger i en bil som rister skal ikke kunne tømme en spottbok det har
+tatt tolv turer å fylle.
+
+Bak koden: slette enkeltspillere eller alle, slette turen som er i gang, slette
+lagrede turer, nullstille frimodus-tellingen, tømme spottboka, stille
+trykkpausen, bytte kode, og slette alt slik at appen blir som nyinstallert.
+
+Koden ligger i klartekst på enheten. Den er en sperre mot uhell, ikke sikkerhet,
+og skjermbildet sier det rett ut i stedet for å late som noe annet.
+
+## Trykkpausen
+
+Etter hvert trykk er det stille i femten sekunder, uansett hvilken ting det
+gjelder. Uten den er et brett fylt på ti sekunder, og da er hele poenget borte.
+Nedtellingen vises som en gul brikke ved siden av angreknappen, så det er
+tydelig at det er en pause og ikke en feil. Lengden kan stilles i
+foreldrekontrollen, eller slås av.
+
+Angreknappen står alltid framme og fjerner både det siste funnet og ventetiden
+— et feiltrykk skal ikke koste femten sekunder i tillegg.
+
 ## Om merkene
 
 Det finnes 30 merker, og ingen av dem er daglige. Ingen streaks, ingenting som
@@ -142,6 +167,8 @@ js/data/quiz.js       46 quizspørsmål
 js/kjerne/brett.js    brettgenerering, nivåer, bingo-logikk
 js/kjerne/spill.js    spilltilstand for brettspillene
 js/kjerne/frimodus.js telling, 30-sekunderssperre og varig lagring i frimodus
+js/kjerne/foreldre.js koden og alt som sletter noe
+js/kjerne/sperre.js   den felles trykkpausen mellom hvert trykk
 js/kjerne/lager.js    lagring i localStorage
 js/kjerne/lyd.js      lyd laget med Web Audio, tale med Web Speech
 js/kjerne/tilfeldig.js frø-styrt tilfeldighet og spillkoder
