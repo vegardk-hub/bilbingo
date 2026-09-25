@@ -55,7 +55,7 @@ Hvert fullførte brett flytter dere videre, og hver milepæl har en liten sann
 opplysning om stedet. Det gir sju timer i bil en form.
 
 **Spottboka (på tvers av turer).** Alt dere noen gang har funnet blir liggende,
-sortert etter sjeldenhet. 30 merker å ta. Det er dette som gjør at tur nummer
+sortert etter sjeldenhet. 33 merker å ta. Det er dette som gjør at tur nummer
 tolv fortsatt har noe å strekke seg etter.
 
 ## Det som faktisk er vanskelig
@@ -142,7 +142,7 @@ Angreknappen står alltid framme og fjerner både det siste funnet og ventetiden
 
 ## Om merkene
 
-Det finnes 30 merker, og ingen av dem er daglige. Ingen streaks, ingenting som
+Det finnes 33 merker, og ingen av dem er daglige. Ingen streaks, ingenting som
 forsvinner hvis dere lar appen ligge i tre måneder. Et merke dere har tatt,
 beholder dere. Helsedirektoratets skjermråd fra 2026 setter en time om dagen for
 en seksåring — en app som skal bruke av den tiden bør fortjene den, ikke mase
